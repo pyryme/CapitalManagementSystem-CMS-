@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>登录-Login</title>
+
+  <style>
+    #loginFrame {
+      width: 40%;
+      margin: 10% 35% 0 35%;
+    }
+
+    .text {
+      font-weight: bolder;
+    }
+
+    #toRegister {
+      width: 55%;
+      text-align: right;
+    }
+  </style>
+
+<!--  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>-->
+</head>
+<body>
+<script src="js/axios-0.18.0.js"></script>
+
+
+<div id="loginFrame">
+  <h1>LOGIN</h1>
+  <h3>请输入用户信息：</h3>
+
+  <form>
+    <label> <span class="text">Username</span> <input id="username" type="text" name="username" placeholder="用户名"
+                                                      required></label><br><br>
+    <label> <span class="text">Password</span> <input id="password" type="password" name="password"
+                                                      placeholder="密码" required></label><br><br>
+    <button type="button" onclick="post()">Login</button>
+  </form>
+</div>
+
+<div id="toRegister">
+  <a href="register.html">Do not have an account?</a>
+  <!--    ---------------------------------------------------------------------------------------------------------------->
+</div>
+
+
+
+
+
+</body>
+
+<script>
+  function post() {
+    //获取用户输入的用户名和密码
+    let usernameElement = document.getElementById("username");
+    let username = usernameElement.value;
+
+    let passwordElement = document.getElementById("password");
+    let password = passwordElement.value;
+
+    //将注册信息封装为一个json对象
+    let loginObj = {username: username, password: password};
+
+
+    axios({
+      method: "post",
+      // url: "http://localhost:8080/CMS/User/login",
+      url: "http://localhost:8080/CMS/User/login",
+      data: loginObj
+    }).then(function (resp) {
+      // alert('axios success');
+      alert(resp.data);
+      if (resp.data === "登录成功！") {
+        //用于传递username这个信息（前面没有用vue所以就用这个方法了）
+        localStorage.setItem('username', username);
+        location.href = "home.html";
+      }
+    }).catch(error => {
+      // 请求失败处理
+      console.error('Error logging in:', error);
+      alert('axios failed. Please try again.');
+    });
+  }
+
+</script>
+
+</html>

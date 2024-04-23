@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Create Group</title>
+  <script src="js/vue.js"></script>
+  <script src="js/axios-0.18.0.js"></script>
+</head>
+<body>
+
+<div id="app">
+  <h1>Create Group</h1>
+  <hr>
+
+  <!-- 创建群组表单 -->
+  <div class="create-group-form">
+    <label for="groupName">Group Name:</label>
+    <input type="text" id="groupName" v-model="groupName" placeholder="Enter group name">
+
+    <label for="groupDescription">Group Description:</label>
+    <textarea id="groupDescription" v-model="groupDescription" placeholder="Enter group description"></textarea>
+
+    <button @click="submitForm">Create</button>
+  </div>
+</div>
+
+<script>
+  new Vue({
+    el: '#app',
+    data() {
+      return {
+        groupName: '',
+        groupDescription: ''
+      };
+    },
+    methods: {
+      submitForm() {
+        // 发送创建群组的请求
+        axios.post('http://localhost:8080/CMS/Group/createGroup', {
+          groupName: this.groupName,
+          groupDescription: this.groupDescription
+        })
+                .then(response => {
+                  alert('Group created successfully!');
+                  // 跳转到群组中心页面
+                  window.location.href = 'groupCenter.html';
+                })
+                .catch(error => {
+                  alert('Failed to create group. Please try again.');
+                  console.error('Error creating group:', error);
+                });
+      }
+    }
+  });
+</script>
+
+<style>
+  /* 基本样式 */
+  body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+  }
+  h1 {
+    text-align: center;
+  }
+  .create-group-form {
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  .create-group-form label,
+  .create-group-form input,
+  .create-group-form textarea,
+  .create-group-form button {
+    display: block;
+    width: 100%;
+    margin-bottom: 15px;
+  }
+  .create-group-form button {
+    padding: 10px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  .create-group-form button:hover {
+    background-color: #0056b3;
+  }
+</style>
+
+</body>
+</html>

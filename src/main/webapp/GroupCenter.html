@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Group Center</title>
+  <script src="js/vue.js"></script>
+  <script src="js/axios-0.18.0.js"></script>
+</head>
+<body>
+
+<div id="app">
+  <h1>Group Center</h1>
+  <hr>
+
+  <!-- 创建群组按钮 -->
+  <div class="create-group-btn">
+    <button @click="createGroup">创建群组</button>
+  </div>
+
+  <!-- 我加入的群组 -->
+  <h2>我加入的群组</h2>
+  <div class="group-list">
+    <div v-for="group in joinedGroups" :key="group.id" class="group-card">
+      <a :href="'groupDetails.html?id=' + group.id">
+        <h3>{{ group.name }}</h3>
+        <p>{{ group.description }}</p>
+      </a>
+    </div>
+  </div>
+
+  <!-- 我创建的群组 -->
+  <h2>我创建的群组</h2>
+  <div class="group-list">
+    <div v-for="group in createdGroups" :key="group.id" class="group-card">
+      <a :href="'groupDetails.html?id=' + group.id">
+        <h3>{{ group.name }}</h3>
+        <p>{{ group.description }}</p>
+      </a>
+    </div>
+  </div>
+</div>
+
+<script>
+  new Vue({
+    el: '#app',
+    data() {
+      return {
+        joinedGroups: [],
+        createdGroups: []
+      };
+    },
+    mounted() {
+      this.loadGroups();
+    },
+    methods: {
+      loadGroups() {
+        // 加载加入的群组
+        axios.get('http://localhost:8080/CMS/Group/getJoinedGroups')
+                .then(response => {
+                  this.joinedGroups = response.data;
+                })
+                .catch(error => {
+                  alert('Failed to load joined groups. Please try again.');
+                  console.error('Error loading joined groups:', error);
+                });
+
+        // 加载创建的群组
+        axios.get('http://localhost:8080/CMS/Group/getCreatedGroups')
+                .then(response => {
+                  this.createdGroups = response.data;
+                })
+                .catch(error => {
+                  alert('Failed to load created groups. Please try again.');
+                  console.error('Error loading created groups:', error);
+                });
+      },
+      createGroup() {
+        // 跳转到创建群组页面
+        window.location.href = 'createGroup.html';
+      }
+    }
+  });
+</script>
+
+<style>
+  /* 基本样式 */
+  body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+  }
+  h1 {
+    text-align: center;
+  }
+  .group-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  .group-card {
+    width: 30%;
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  .group-card:hover {
+    border-color: #007BFF;
+  }
+  .group-card a {
+    text-decoration: none;
+    color: #333;
+  }
+  .create-group-btn {
+    margin-bottom: 20px;
+  }
+</style>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+<!--例子1：-->
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--  <meta charset="UTF-8">-->
+<!--  <title>Group Center</title>-->
+<!--  <script src="js/vue.js"></script>-->
+<!--</head>-->
+<!--<body>-->
+
+<!--<div id="app">-->
+<!--  <h1>Group Center</h1>-->
+<!--  <hr>-->
+
+<!--  &lt;!&ndash; 创建群组按钮 &ndash;&gt;-->
+<!--  <div class="create-group-btn">-->
+<!--    <button @click="createGroup">创建群组</button>-->
+<!--  </div>-->
+
+<!--  &lt;!&ndash; 我加入的群组 &ndash;&gt;-->
+<!--  <h2>我加入的群组</h2>-->
+<!--  <div class="group-list">-->
+<!--    <div v-for="group in joinedGroups" :key="group.id" class="group-card">-->
+<!--      <a :href="'groupDetails.html?id=' + group.id">-->
+<!--        <h3>{{ group.name }}</h3>-->
+<!--        <p>{{ group.description }}</p>-->
+<!--      </a>-->
+<!--    </div>-->
+<!--  </div>-->
+
+<!--  &lt;!&ndash; 我创建的群组 &ndash;&gt;-->
+<!--  <h2>我创建的群组</h2>-->
+<!--  <div class="group-list">-->
+<!--    <div v-for="group in createdGroups" :key="group.id" class="group-card">-->
+<!--      <a :href="'groupDetails.html?id=' + group.id">-->
+<!--        <h3>{{ group.name }}</h3>-->
+<!--        <p>{{ group.description }}</p>-->
+<!--      </a>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->
+
+<!--<script>-->
+<!--  new Vue({-->
+<!--    el: '#app',-->
+<!--    data() {-->
+<!--      return {-->
+<!--        joinedGroups: [-->
+<!--          { id: 1, name: '群组A', description: '这是群组A的描述' },-->
+<!--          { id: 2, name: '群组B', description: '这是群组B的描述' }-->
+<!--        ],-->
+<!--        createdGroups: [-->
+<!--          { id: 3, name: '群组C', description: '这是群组C的描述' },-->
+<!--          { id: 4, name: '群组D', description: '这是群组D的描述' }-->
+<!--        ]-->
+<!--      };-->
+<!--    },-->
+<!--    methods: {-->
+<!--      createGroup() {-->
+<!--        // 跳转到创建群组页面-->
+<!--        window.location.href = 'createGroup.html';-->
+<!--      }-->
+<!--    }-->
+<!--  });-->
+<!--</script>-->
+
+<!--<style>-->
+<!--  /* 基本样式 */-->
+<!--  body {-->
+<!--    font-family: Arial, sans-serif;-->
+<!--    margin: 20px;-->
+<!--  }-->
+<!--  h1 {-->
+<!--    text-align: center;-->
+<!--  }-->
+<!--  .group-list {-->
+<!--    display: flex;-->
+<!--    flex-wrap: wrap;-->
+<!--    justify-content: space-between;-->
+<!--  }-->
+<!--  .group-card {-->
+<!--    width: 30%;-->
+<!--    margin-bottom: 20px;-->
+<!--    padding: 15px;-->
+<!--    border: 1px solid #ccc;-->
+<!--    border-radius: 8px;-->
+<!--    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);-->
+<!--  }-->
+<!--  .group-card:hover {-->
+<!--    border-color: #007BFF;-->
+<!--  }-->
+<!--  .group-card a {-->
+<!--    text-decoration: none;-->
+<!--    color: #333;-->
+<!--  }-->
+<!--  .create-group-btn {-->
+<!--    margin-bottom: 20px;-->
+<!--  }-->
+<!--</style>-->
+
+<!--</body>-->
+<!--</html>-->

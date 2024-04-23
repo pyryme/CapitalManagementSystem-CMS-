@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>登录-Login</title>
+
+  <style>
+    #loginFrame {
+      width: 40%;
+      margin: 10% 35% 0 35%;
+    }
+
+    .text {
+      font-weight: bolder;
+    }
+
+    #toRegister {
+      width: 55%;
+      text-align: right;
+    }
+  </style>
+  <script src="js/axios-0.18.0.js"></script>
+<!--  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>-->
+</head>
+<body>
+
+<div id="loginFrame">
+  <h1>LOGIN</h1>
+  <h3>请输入用户信息：</h3>
+<!--  <form onsubmit="event.preventDefault(); post();">-->
+<!--  <form>-->
+<!--    <label> <span class="text">Username</span> <input id="username" type="text" name="username" placeholder="用户名"-->
+<!--                                                      required></label><br><br>-->
+<!--    <label> <span class="text">Password</span> <input id="password" type="password" name="password"-->
+<!--                                                      placeholder="密码" required></label><br><br>-->
+<!--    <button type="button" onclick="post()">Login</button>-->
+<!--  </form>-->
+
+
+
+
+
+
+<!--  <form action="User/login" method="post">-->
+<!--    用户名: <input type="text" name="username"><br>-->
+<!--    密码: <input type="password" name="password"><br>-->
+<!--    <input type="submit" value="登录">-->
+<!--  </form>-->
+
+
+
+  <form id="loginForm" onsubmit="event.preventDefault(); post();">
+    <div>
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username" required>
+    </div>
+    <div>
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" required>
+    </div>
+    <div>
+      <input type="submit" value="Login">
+    </div>
+  </form>
+
+
+
+
+
+
+</div>
+
+<div id="toRegister">
+  <a href="register.html">Do not have an account?</a>
+  <!--    ---------------------------------------------------------------------------------------------------------------->
+</div>
+
+
+
+
+
+</body>
+
+<script>
+  function post() {
+    //获取用户输入的用户名和密码
+    let usernameElement = document.getElementById("username");
+    let username = usernameElement.value;
+    alert("get username"+ username);
+
+    let passwordElement = document.getElementById("password");
+    let password = passwordElement.value;
+    alert("get password" + password);
+
+    //将注册信息封装为一个json对象
+    let loginObj = {username: username, password: password};
+
+    //
+    // alert("before axios")
+    //
+    // axios.post("User/login", loginObj)
+    //         .then(function (resp) {
+    //           //输出结果信息
+    //           alert(resp.data);
+    //           //如果登录成功，则进行页面的跳转
+    //           if (resp.data === "登录成功！") {
+    //             // location.href = "home.html";
+    //             location.href = "test1.html";
+    //             alert("axios success");
+    //           }
+    //         }).catch(function (error) {
+    //   //处理错误情况
+    //   // alert("An error occurred while sending the request: " + error.message);
+    //   console.error("Error sending request:", error);
+    //   alert("An error occurred while sending the request: " + error.message);
+    // });
+    //
+
+    // 使用axios发送POST请求
+    axios.post('User/login', loginObj)
+            .then(response => {
+              // 请求成功处理
+              console.log(response.data);
+              alert('Login successful!');
+            })
+            .catch(error => {
+              // 请求失败处理
+              console.error('Error logging in:', error);
+              alert('Login failed. Please try again.');
+            });
+
+    alert("after axios")
+  }
+</script>
+
+</body>
+</html>

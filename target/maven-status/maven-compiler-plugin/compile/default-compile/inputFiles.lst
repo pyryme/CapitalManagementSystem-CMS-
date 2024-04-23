@@ -1,0 +1,16 @@
+C:\GithubResource\CMS\src\main\java\com\xxx\cms\service\impl\UserServiceImpl.java
+C:\GithubResource\CMS\src\main\java\com\xxx\cms\util\MD5Utils.java
+C:\GithubResource\CMS\src\main\java\com\xxx\cms\bean\vo\UserSignupVO.java
+C:\GithubResource\CMS\src\main\java\com\xxx\cms\service\UserService.java
+C:\GithubResource\CMS\src\main\java\com\xxx\cms\controller\BaseServlet.java
+C:\GithubResource\CMS\src\main\java\com\xxx\cms\bean\vo\UserLoginVO.java
+C:\GithubResource\CMS\src\main\java\com\xxx\cms\dao\impl\UserDaoImpl.java
+C:\GithubResource\CMS\src\main\java\com\xxx\cms\constant\ResultConst.java
+C:\GithubResource\CMS\src\main\java\com\xxx\cms\controller\UserServlet.java
+C:\GithubResource\CMS\src\main\java\com\xxx\cms\util\DBUtils.java
+C:\GithubResource\CMS\src\main\java\com\xxx\cms\bean\vo\UserUpdatePhoneUsernameVO.java
+C:\GithubResource\CMS\src\main\java\com\xxx\cms\bean\Result.java
+C:\GithubResource\CMS\src\main\java\com\xxx\cms\model\User.java
+C:\GithubResource\CMS\src\main\java\com\xxx\cms\bean\vo\UserAvatarVO.java
+C:\GithubResource\CMS\src\main\java\com\xxx\cms\dao\UserDao.java
+C:\GithubResource\CMS\src\main\java\com\xxx\cms\bean\PageBean.java

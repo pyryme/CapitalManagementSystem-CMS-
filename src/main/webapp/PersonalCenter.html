@@ -1,0 +1,297 @@
+<!--先搞呈现的，再搞修改的-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>个人中心 - Personal Center</title>
+    <script src="js/vue.js"></script>
+    <script src="js/axios-0.18.0.js"></script>
+</head>
+<body>
+
+<div id="app">
+    <h1>个人中心</h1>
+    <hr>
+
+    <!-- 显示用户信息 -->
+    <div v-if="!isEditing">
+        <div>
+            <label>用户名：</label>
+            <span>{{ user.username }}</span>
+            <button @click="toggleEdit">修改</button>
+        </div>
+
+        <div>
+            <label>头像：</label>
+            <img :src="user.avatar" alt="Avatar" width="100">
+        </div>
+
+        <div>
+            <label>手机号：</label>
+            <span>{{ user.phoneNumber }}</span>
+        </div>
+    </div>
+
+    <!-- 编辑用户信息表单 -->
+    <div v-if="isEditing">
+        <div>
+            <label>用户名：</label>
+            <input type="text" v-model="tempUser.username">
+        </div>
+
+        <div>
+            <label>头像：</label>
+            <input type="file" @change="onFileChange">
+            <img :src="tempUser.avatar" alt="Avatar" width="100">
+        </div>
+
+        <div>
+            <label>手机号：</label>
+            <input type="text" v-model="tempUser.phoneNumber">
+        </div>
+
+        <div>
+            <button @click="updateUser">保存</button>
+            <button @click="cancelEdit">取消</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    new Vue({
+        el: '#app',
+        data() {
+            return {
+                user: {
+                    // username: '张三',
+                    // avatar: '/path/to/avatar.jpg',
+                    // phoneNumber: '1234567890'
+                    username: '',
+                    avatar: '',
+                    phoneNumber: ''
+                },
+                tempUser: {
+                    username: '',
+                    avatar: '',
+                    phoneNumber: ''
+                },
+                isEditing: false,
+                avatarFile: null
+            };
+        },
+
+        mounted() {
+
+            const urlParams = new URLSearchParams(window.location.search);
+            this.user.username = urlParams.get('username') || '未登录';
+            this.loading();//这个顺序要在从前端加载username之后，否则这个函数中无法获取
+        },
+
+        methods: {
+
+
+            //------------加载板块---------
+
+            loading(){
+                // this.getUserName();名字就不用获取了，这个是以用户名username为核心的，不是以id为核心的
+                this.getUserAvatar();
+                 this.getUserPhone();
+            },
+
+            getUserPhone() {
+                const formData = new FormData();
+                formData.append("username",this.user.username );
+
+                axios({
+                    method: "post",
+                    url: "http://localhost:8080/CMS/User/getUserPhone",
+                    data: formData
+                }).then((resp) => {
+                    alert("PC.HTML 1get axios Phone: " + resp.data);
+                    this.user.phoneNumber = resp.data;
+                }).catch(error => {
+                    alert('axios Phone failed. Please try again.');
+                });
+            },
+
+
+            getUserAvatar() {
+                const formData = new FormData();
+                formData.append("username",this.user.username );
+
+                // axios({
+                //     method: "post",
+                //     url: "http://localhost:8080/CMS/User/getUserAvatar",
+                //     data: formData
+                // }).then(function (resp) {
+                //     alert("PC.HTML 1get  axios avatar  :"+resp.data)
+                //     this.user.avatar = resp.data;
+                //     alert("PC.HTML 2get axios avatar  :"+this.user.avatar);
+                // }).catch(error => {
+                //     alert('axios avatar failed. Please try again.');
+                // });
+
+                axios({
+                    method: "post",
+                    url: "http://localhost:8080/CMS/User/getUserAvatar",
+                    data: formData
+                }).then((resp) => {
+                    alert("PC.HTML 1get axios avatar: " + resp.data);
+
+                    //获取图片的路径
+                    // this.user.avatar = resp.data;要修改为相对路径vue的src才能用，所以用下面的替换这个
+                    // 完整的文件系统路径
+                    const fullPath =resp.data;
+                    // 服务器根路径
+                    const serverRoot = "C:\\GithubResource\\CMS\\src\\main\\webapp\\";
+                    // 移除前面的部分，只保留相对路径
+                    const relativePath = fullPath.replace(serverRoot, "");
+                    this.user.avatar = relativePath;
+
+
+                    alert("PC.HTML 2get axios avatar: " + this.user.avatar);
+                }).catch(error => {
+                    alert('axios avatar failed. Please try again.');
+                });
+
+
+            },
+
+            // //获取用户的手机号
+            // getUserPhone() {
+            //     axios({
+            //         method: "post",
+            //         url: "http://localhost:8080/CMS/User/getUserPhone"
+            //     }).then(function (resp) {
+            //         alert("PC.HTML get  axios phone  :"+resp.data)
+            //         this.user.phoneNumber = resp.data;
+            //         alert("PC.HTML get axios phone  :"+this.user.phoneNumber);
+            //     }).catch(error => {
+            //         alert('axios phone failed. Please try again.');
+            //     });
+            // },
+
+            //获取用用户名字
+            getUserName() {
+                axios({
+                    method: "post",
+                    url: "http://localhost:8080/CMS/User/getUserName"
+                }).then(function (resp) {
+                    alert("PC.HTML get axios userName  :"+resp.data)
+                    this.user.username = resp.data;
+                    alert("PC.HTML get axios userName  :"+this.user.username);
+                }).catch(error => {
+                    alert('axios failed. Please try again.');
+                });
+            },
+
+            //---------修改板块------------
+            //点击确定修改 执行两个函数
+            updateUser(){
+                //先上传图片，防止找不到username了，这里逻辑可以推导一下。
+                this.updateUserAvatar();
+                this.updatePhoneUsername();
+                this.isEditing = false;
+            },
+
+            // 更新用户名和手机号后上传到数据库
+            updatePhoneUsername(){
+                //（隐藏bug****）这个数据类型可能有点问题,不知道这样改了会不会非常规的连接，执行下一句之后给我这个也更新了
+                let Oldusername=this.user.username;//(end------)
+                this.user.username=this.tempUser.username;
+                this.user.phoneNumber=this.tempUser.phoneNumber;
+                const formData = new FormData();
+                formData.append("Oldusername", Oldusername);
+                formData.append("Newusername", this.user.username);
+                formData.append("phoneNumber", this.user.phoneNumber);
+
+                axios({
+                    method: "post",
+                    // url: "http://localhost:8080/CMS/User/login",
+                    url: "http://localhost:8080/CMS/User/updatePhoneUsername",
+                    data: formData
+                })
+                    .then(response => {
+                        alert("PC.HTML axios success. now update this.tempUser.avatar from resp ");
+                    })
+                    .catch(error => {
+                        alert("PC.HTML axios fail");
+                        console.error('Error uploading UsernameAndPhonenumber:', error);
+                    });
+
+
+
+            },
+
+            //更新图片后保存到本地并且上传到数据库（在servlet中进行操作）
+            updateUserAvatar() {
+                // 更新用户信息的逻辑
+                this.user.avatar = this.tempUser.avatar;
+
+
+
+                //将图片保存到本地
+                alert("PC.HTML 1.start save image");
+                const formData = new FormData();
+                formData.append("file", this.avatarFile);
+                formData.append("username", this.user.username);
+                alert("PC.HTML 2.file"+this.avatarFile);
+                alert("PC.HTML  3.init formData: "+formData);
+
+
+
+                axios({
+                    method: "post",
+                    // url: "http://localhost:8080/CMS/User/login",
+                    url: "http://localhost:8080/CMS/User/changeSaveImage",
+                    data: formData,
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                })
+                    .then(response => {
+                        alert("PC.HTML axios success. now update this.tempUser.avatar from resp ");
+                        this.tempUser.avatar = `/img/${response.data}`;
+                    })
+                    .catch(error => {
+                        alert("PC.HTML axios fail");
+                        console.error('Error uploading file:', error);
+                    });
+
+
+
+
+            },
+
+            //点击修改按键的时候变为可编辑的
+            toggleEdit() {
+                this.tempUser = {...this.user};
+                this.isEditing = true;
+            },
+
+            //选择头像的文件
+            onFileChange(e) {
+                const file = e.target.files[0];
+                const reader = new FileReader();
+
+                reader.onload = (event) => {
+                    this.tempUser.avatar = event.target.result;
+                };
+
+                reader.readAsDataURL(file);
+                this.avatarFile = file;
+            },
+
+            //取消修改
+            cancelEdit() {
+                this.isEditing = false;
+            }
+
+
+        }
+    })
+</script>
+
+</body>
+</html>
+

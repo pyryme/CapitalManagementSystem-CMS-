@@ -1,0 +1,93 @@
+<!--改动注意：除了这一面的部分signup改成register外，后面的逻辑没有发生变动.所以搞得有点乱-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>注册-Register</title>
+
+    <style>
+        #signupFrame {
+            width: 40%;
+            margin: 10% 35% 0 35%;
+        }
+
+        .text {
+            font-weight: bolder;
+        }
+
+        #toLogin {
+            width: 55%;
+            text-align: right;
+        }
+
+    </style>
+
+    <script src="js/axios-0.18.0.js"></script>
+</head>
+<body>
+<div id="signupFrame">
+    <h1>Register</h1>
+    <h3>请设置您的用户信息：</h3>
+
+    <form>
+        <span class="text">Username</span>
+        <br> <span class="text">用户名长度不超过50个字符</span><br>
+        <label><input id="username" type="text" name="username" placeholder="用户名" required></label>
+        <br><br>
+        <span class="text">Password</span>
+        <br> <span class="text">密码可使用字母、数字、下划线，长度为6~20</span><br>
+        <label> <input id="password" type="password" name="password" placeholder="密码" required></label>
+        <br><br>
+        <span class="text">Confirm Password</span>
+        <br>
+        <label><input id="password2" type="password" name="password2" placeholder="再次输入密码"
+                      required></label><br><br>
+        <button type="button" onclick="post()">Register</button>
+    </form>
+</div>
+
+<div id="toLogin">
+    <a href="login.html">Already have an account?</a>
+</div>
+</body>
+
+<script>
+    function post() {
+        //获取用户输入的用户名和两次密码
+        let usernameElement = document.getElementById("username");
+        let username = usernameElement.value;
+
+        let passwordElement = document.getElementById("password");
+        let password = passwordElement.value;
+
+        let password2Element = document.getElementById("password2");
+        let password2 = password2Element.value;
+
+
+        //将注册信息封装为一个json对象
+        let registerObj = {username: username, password: password, password2: password2};
+        // axios.post("/tieba_war/User/signup", registerObj)
+        //     .then(function (resp) {
+        //         alert(resp.data);
+        //     });
+        axios({
+            method: "post",
+            // url: "http://localhost:8080/CMS/User/login",
+            url: "http://localhost:8080/CMS/User/signup",
+            data: registerObj
+        }).then(function (resp) {
+            alert('signup axios success');
+            alert(resp.data);
+            // if (resp.data === "登录成功！") {
+            //     location.href = "home.html";
+            // }
+        }).catch(error => {
+            // 请求失败处理
+            console.error('Error signup:', error);
+            alert('signup axios failed. Please try again.');
+        });
+    }
+
+</script>
+</html>

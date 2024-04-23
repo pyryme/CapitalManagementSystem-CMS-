@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>主页 - Home</title>
+
+  <style>
+    #main {
+      width: 60%;
+      margin: 0 20% 0 20%;
+    }
+
+    #top {
+      text-align: center;
+    }
+
+    #select{
+      float: left;
+      width: 230px;
+    }
+
+    #content {
+      margin-left: 230px;
+    }
+
+    #bar {
+      text-align: center;
+    }
+
+    #button {
+      text-align: end;
+    }
+
+    .topContent {
+      text-decoration: none;
+      color: grey;
+      font-size: 1.5em;
+      font-weight: bold;
+    }
+  </style>
+  <script src="js/axios-0.18.0.js"></script>
+<!--  <script src="js/vue.js"></script>-->
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+
+</head>
+<body>
+
+<div id="main">
+  <div id="top">
+    <h1>单机贴吧</h1>
+    <hr>
+    <a class="topContent" href="PersonalCenter.html" target="_blank">个人中心</a>
+    <span style="margin: 0 453px;">&nbsp;</span>
+    <a class="topContent" href="NewBar.html" target="_blank">新建贴吧</a>
+    <br>
+    <hr>
+    <br>
+  </div>
+
+  <div id="select">
+    <form>
+      <label><input v-model="selectContent" type="text" name="barName" placeholder="搜索贴吧"></label>
+      <label>
+        <button type="button" @click="selectBar">搜索</button>
+        <br>
+      </label>
+    </form>
+    <div v-show="isSelect===1">
+      <h4>搜索结果</h4>
+      <h5 v-show="selectBars.length===0">无查询结果</h5>
+      <div v-for="selectBar in selectBars">
+        <img :src="selectBar.barPictureSrc" alt="BarPicture" width="80">
+        <a :href="'Bar.html?bar=' + encodeURIComponent(JSON.stringify(selectBar))"
+           target="_blank">{{selectBar.barName}}</a>
+        <br>
+      </div>
+    </div>
+  </div>
+
+  <div id="content">
+    <div id="button">
+      <button type="button" @click="prevPage">上一页</button>
+      <button type="button" @click="nextPage">下一页</button>
+    </div>
+    <div id="bar" v-for="bar in bars">
+      <img :src="bar.barPictureSrc" alt="BarPicture" width="80">
+      <a :href="'Bar.html?bar=' + encodeURIComponent(JSON.stringify(bar))"
+         target="_blank">{{bar.barName}}</a>
+    </div>
+  </div>
+</div>
+</body>
+
+<script>
+  new Vue({
+    el: "#main",
+    data() {
+      return {
+        //贴吧数组
+        bars: [],
+        //页码（初始值为1）
+        pageCount: 1,
+        //每一页的数据数
+        countPerPage: 5,
+        //总数据数
+        totalCount: undefined,
+        //输入搜索框的内容
+        selectContent: undefined,
+        //是否进行了搜索
+        isSelect: 0,
+        //搜索到的贴吧
+        selectBars: []
+      }
+    },
+    mounted() {
+      //页面加载完成后，展示第一页贴吧
+      this.getCurrentPageContent(this.pageCount, this.countPerPage);
+    },
+    methods: {
+      //1.获取当前页面的贴吧
+      getCurrentPageContent() {
+        //将页码与每页的数据数封装为一个json对象
+        let pageObj = {pageCount: this.pageCount, countPerPage: this.countPerPage};
+
+        //发送异步请求，获取内容
+        axios.post("/tieba_war/Bar/getBars", pageObj)
+                .then(resp => {
+                  this.bars = resp.data.contents;
+                  this.totalCount = resp.data.totalCount;
+                })
+      },
+      //2.往前翻一页
+      prevPage() {
+        if (this.pageCount > 1) {
+          this.pageCount--;
+          this.getCurrentPageContent();
+        }
+      },
+      //3.往后翻一页
+      nextPage() {
+        if (this.pageCount * this.countPerPage < this.totalCount) {
+          this.pageCount++;
+          this.getCurrentPageContent();
+        }
+      },
+      //4.搜索贴吧
+      selectBar() {
+        axios.post("/tieba_war/Bar/selectBar", {selectContent: this.selectContent})
+                .then(resp => {
+                  this.selectBars = resp.data;
+                  this.isSelect = 1;
+                })
+      }
+    }
+  })
+</script>
+</html>
