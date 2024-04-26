@@ -68,26 +68,120 @@ const fullPath = "C:\\GithubResource\\CMS\\src\\main\\webapp\\img\\916e5c67-76f6
 
 -------之后的GroupVO要把名字改一改，才能
 
+23.数据库的数据类型和DAO定义的不一样
+
+24.抄别人的代码不一定是好事，不知道对方的数据类型转换思路，
+自己先用思维导图将整体的推导再来写效率才高，而且也不会痛苦
+别人的代码只是看看思路，了解核心本质就自己写
+
+
+25.
+<label for="direction">Group Direction:</label>
+<textarea id="direction" v-model="direction"@input="checkDirLength"  placeholder="Enter group Direction"></textarea>
+<p v-if="exceededLimit_Dir" style="color: red;">Exceeded character limit!</p>
+这里的for和id要和new Vue里面的一样，否则就不能联系
+
+26.sql语言中groups是关键词，要用反引号，不同于单引号，我也不知道怎么打出来的
+
+27.总结：可以进行信息传递到下一个网页的方法，
+方法1：直接在html之间传递，就是<a :href="'groupDetails.html?id=' + group.id">
+方法2：在服务端进行传递，用session或者cookie
+
+
+28.写一个功能要先想好输入输出，然后代码从外写到内，从内写到外这个顺序
+
+29.写完之后要总结经验
+
+30.像思维导图这种东西十分重要，不写不行
+
+
+31.后端将ArrayList<String>类型的数据展示到vue框架上的时候，以下是一个模板，
+  <!-- 我加入的群组 -->
+<h2>我加入的群组</h2>
+  <div class="group-list">
+    <div v-for="group in joinedGroups" :key="group" class="group-card">
+      <a :href="'groupDetails.html?id=' + group">
+        <h3>{{ group }}</h3>
+      </a>
+    </div>
+  </div>
+
+  <!-- 我创建的群组 -->
+<h2>我创建的群组</h2>
+  <div class="group-list">
+    <div v-for="group in createdGroups" :key="group" class="group-card">
+      <a :href="'groupDetails.html?id=' + group">
+        <h3>{{ group }}</h3>
+      </a>
+    </div>
+  </div>
+</div>
+
+<script>
+  new Vue({
+    el: '#app',
+    data() {
+      return {
+        joinedGroups: [],
+        createdGroups: []
+      };
+    },
+
+
+
+
+32.自己的命名不规范，在数据库用了is_Public类似的短杠,但是在前面的servlet的地方也用这种短杠result_isPublic，不太好
+
+
+33.前端传信息到servlet
+        const params = new URLSearchParams();
+        params.append("groupName", this.groupName);
+        params.append("groupScale", this.groupScale);
+        params.append("direction", this.direction);
+        params.append("isPublic", this.isPublic);
+
+        //
+        // const formData = new FormData();
+        // formData.append("groupName",this.groupName );
+        // formData.append("groupScale",this.groupScale );
+        // formData.append("direction",this.direction );
+        // formData.append("isPublic",this.isPublic );
+
+        axios({
+          method: "post",
+          url: "http://localhost:8080/CMS/Group/createGroup",
+          data: params
+
+后端：
+//设置字符编码
+        req.setCharacterEncoding("UTF-8");
+        resp.setContentType("text/html;charset=utf-8");
 
 
 
 
 
+        //那个VO作为service的参数没有卵用，还麻烦有限制。
+        //id放最后dao处理吧
+        String groupName = req.getParameter("groupName");
+        String groupScale = req.getParameter("groupScale");
+        String direction = req.getParameter("direction");
+        String isPublic = req.getParameter("isPublic");
+
+有两个传递的比较重要，一个是页面之间，一个是页面到servlet
+
+
+34.放在result的Object data中有3种返回类型
+    1.是普通的常见类型，string等（这个没有键值对,并且声明的时候就能完成空间申请，不用new）
+    2.是一个类的一组信息，比如group_id，group_name等（这个有键值对，并且声明的同时要用new申请空间）
+    3.是数组，可以是常见类型的string的数组，也可以类的数组(这个要用new ArrayList<>()来申请空间)
+
+35.从servlet传送一个类的一组信息到前端的写法看看UnJoinGroupDetail.html处理方式
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
+36.最后的工作就是改成中文，去掉无效提醒信息，去掉无用注释就可以了
 
 
 

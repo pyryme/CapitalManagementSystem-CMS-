@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Result login(String name, String pw) throws SQLException {
         //1.查询用户是否存在
-        System.out.println("USCIMPL into login success");
+//        System.out.println("USCIMPL into login success");
 
         //#1数据类型解释：这个把string类型的参数name传入了DAO.isUser里面
         if (!userDao.isUser(name)){
@@ -78,14 +78,15 @@ public class UserServiceImpl implements UserService {
         }
         //2.4如果密码正确：返回结果封装类并注明成功信息、用户id
         else {
-            //获取用户id
-            Integer useId = userDao.getUserId(name);
+
+            //获取用户id，方便后面进行session操作，
+            String  useId = userDao.getUserId(name);
             return Result.success("登录成功！", useId);
         }
     }
 
     @Override
-    public String getUserName(Integer userId) throws SQLException {
+    public String getUserName(String userId) throws SQLException {
         //调用dao层方法获取用户名
         return userDao.getUserName(userId);
     }

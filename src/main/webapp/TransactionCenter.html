@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Transaction Center</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<!--  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>-->
+  <!--  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>-->
+  <script src="js/vue.js"></script>
+  <script src="js/axios-0.18.0.js"></script>
+</head>
+<body>
+
+<div id="app">
+  <h1>Transaction Center</h1>
+  <hr>
+
+  <!-- 跳转按钮 -->
+  <div class="button-container">
+    <button @click="goToTransactionPage"><i class="fas fa-exchange-alt"></i> 去交易页面</button>
+    <button @click="goToHistoryPage"><i class="fas fa-history"></i> 我的历史记录</button>
+  </div>
+
+  <!-- 我创建的群组 -->
+  <h2>我创建的群组</h2>
+  <div class="group-list">
+    <div v-for="group in createdGroups" :key="group.groupId" class="group-card">
+      <h3>{{ group.groupId }} - {{ group.groupName }} - 我的余额: {{ group.myBalance }}</h3>
+      <div v-for="member in group.members" :key="member.userId">
+        <p>用户ID: {{ member.userId }}, 用户名: {{ member.userName }}, 是否管理员: {{ member.isManager }}, 余额: {{ member.balance }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 我作为管理员加入的群组 -->
+  <h2>我作为管理员加入的群组</h2>
+  <div class="group-list">
+    <div v-for="group in managerGroups" :key="group.groupId" class="group-card">
+      <h3>{{ group.groupId }} - {{ group.groupName }} - 我的余额: {{ group.myBalance }}</h3>
+      <div v-for="member in group.members" :key="member.userId">
+        <p>用户ID: {{ member.userId }}, 用户名: {{ member.userName }}, 是否创建者: {{ member.isCreator }}, 余额: {{ member.balance }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 我作为成员加入的群组 -->
+  <h2>我作为成员加入的群组</h2>
+  <div class="group-list">
+    <div v-for="group in memberGroups" :key="group.groupId" class="group-card">
+      <h3>{{ group.groupId }} - {{ group.groupName }} - 我的余额: {{ group.myBalance }}</h3>
+      <div v-for="member in group.members" :key="member.userId">
+        <p>用户ID: {{ member.userId }}, 用户名: {{ member.userName }}, 是否管理员/创建者: {{ member.isManager }}/{{ member.isCreator }}, 余额: {{ member.balance }}</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  new Vue({
+    el: '#app',
+    data() {
+      return {
+        createdGroups: [],
+        managerGroups: [],
+        memberGroups: []
+      };
+    },
+    mounted() {
+      this.loadGroups();
+    },
+    methods: {
+      loadGroups() {
+        // 加载我创建的群组
+        axios.get('http://localhost:8080/CMS/Group/getCreatedGroups_toTCHTML')
+                .then(response => {
+                  this.createdGroups = response.data;
+                })
+                .catch(error => {
+                  console.error('Error loading created groups:', error);
+                });
+
+        // 加载我作为管理员加入的群组
+        axios.get('http://localhost:8080/CMS/Group/getManagerGroups')
+                .then(response => {
+                  this.managerGroups = response.data;
+                })
+                .catch(error => {
+                  console.error('Error loading manager groups:', error);
+                });
+
+        // 加载我作为成员加入的群组
+        axios.get('http://localhost:8080/CMS/Group/getMemberGroups')
+                .then(response => {
+                  this.memberGroups = response.data;
+                })
+                .catch(error => {
+                  console.error('Error loading member groups:', error);
+                });
+      },
+      goToTransactionPage() {
+        window.location.href = 'transaction.html';
+      },
+      goToHistoryPage() {
+        window.location.href = 'myHistory.html';
+      }
+    }
+  });
+</script>
+
+<style>
+  /* 基本样式 */
+  body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background-color: #f2f2f2;
+  }
+  h1 {
+    text-align: center;
+    color: #333;
+  }
+  .button-container {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .button-container button {
+    margin-right: 10px;
+    padding: 10px 20px;
+    border: none;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  .button-container button i {
+    margin-right: 5px;
+  }
+  .button-container button:hover {
+    background-color: #0056b3;
+  }
+  .group-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  .group-card {
+    width: 30%;
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+  }
+  .group-card h3 {
+    margin: 0;
+    color: #007bff;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  .group-card p {
+    margin: 5px 0;
+    color: #555;
+  }
+</style>
+
+</body>
+</html>

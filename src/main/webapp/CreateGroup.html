@@ -14,11 +14,28 @@
 
   <!-- 创建群组表单 -->
   <div class="create-group-form">
-    <label for="groupName">Group Name:</label>
-    <input type="text" id="groupName" v-model="groupName" placeholder="Enter group name">
+    <label for="groupName">Group Name:（限制15字）</label>
+    <input type="text" id="groupName" v-model="groupName" @input="checkNameLength" placeholder="Enter group name">
+    <p v-if="exceededLimit_Name" style="color: red;">Exceeded character limit!</p>
 
-    <label for="groupDescription">Group Description:</label>
-    <textarea id="groupDescription" v-model="groupDescription" placeholder="Enter group description"></textarea>
+
+    <label for="groupScale">Group Scale:</label>
+    <textarea id="groupScale" v-model="groupScale" @input="checkScaleLength" placeholder="Enter group scale"></textarea>
+    <p v-if="exceededLimit_Scale" style="color: red;">Exceeded character limit!</p>
+
+
+    <label for="direction">Group Direction:</label>
+    <textarea id="direction" v-model="direction"@input="checkDirLength"  placeholder="Enter group Direction"></textarea>
+    <p v-if="exceededLimit_Dir" style="color: red;">Exceeded character limit!</p>
+
+    <label>Is Public:</label>
+    <div>
+      <input type="radio" id="publicYes" value="1" v-model="isPublic">
+      <label for="publicYes">Yes</label>
+
+      <input type="radio" id="publicNo" value="0" v-model="isPublic">
+      <label for="publicNo">No</label>
+    </div>
 
     <button @click="submitForm">Create</button>
   </div>
@@ -29,26 +46,99 @@
     el: '#app',
     data() {
       return {
+        groupId:'',
         groupName: '',
-        groupDescription: ''
+        groupScale:'',
+        direction: '',
+        isPublic:'1',
+        maxNameLength:15,
+        maxScaleLength:15,
+        maxDirLength:15,
+        exceededLimit_Name:false,
+        exceededLimit_Scale:false,
+        exceededLimit_Dir:false
       };
     },
+
+    computed: {
+      isPublicValue() {
+        return this.isPublic === '1' ? 1 : 0;
+      }
+    },
+
     methods: {
+      checkNameLength() {
+        if (this.groupName.length > this.maxNameLength) {
+          this.groupName = this.groupName.substring(0, this.maxNameLength);
+          this.exceededLimit_Name = true;
+        } else {
+          this.exceededLimit_Name = false;
+        }
+      },
+      checkScaleLength() {
+        if (this.groupScale.length > this.maxScaleLength) {
+          this.groupScale = this.groupScale.substring(0, this.maxScaleLength);
+          this.exceededLimit_Scale = true;
+        } else {
+          this.exceededLimit_Scale = false;
+        }
+      },
+      checkDirLength() {
+        if (this.direction.length > this.maxDirLength) {
+          this.direction = this.direction.substring(0, this.maxDirLength);
+          this.exceededLimit_Dir = true;
+        } else {
+          this.exceededLimit_Dir = false;
+        }
+      },
+
+
       submitForm() {
-        // 发送创建群组的请求
-        axios.post('http://localhost:8080/CMS/Group/createGroup', {
-          groupName: this.groupName,
-          groupDescription: this.groupDescription
-        })
-                .then(response => {
-                  alert('Group created successfully!');
-                  // 跳转到群组中心页面
-                  window.location.href = 'groupCenter.html';
-                })
-                .catch(error => {
-                  alert('Failed to create group. Please try again.');
-                  console.error('Error creating group:', error);
-                });
+        //随机生成id的语法和这里不同，所以后面再来处理id
+        // alert("CGHTML ---groupDir"+this.direction);
+        const params = new URLSearchParams();
+        params.append("groupName", this.groupName);
+        params.append("groupScale", this.groupScale);
+        params.append("direction", this.direction);
+        params.append("isPublic", this.isPublic);
+
+        //
+        // const formData = new FormData();
+        // formData.append("groupName",this.groupName );
+        // formData.append("groupScale",this.groupScale );
+        // formData.append("direction",this.direction );
+        // formData.append("isPublic",this.isPublic );
+
+        axios({
+          method: "post",
+          url: "http://localhost:8080/CMS/Group/createGroup",
+          data: params
+        }).then((resp) => {
+          // alert("axios success");
+          alert(resp.data)
+        }).catch(error => {
+          alert('axios  failed. Please try again.');
+        });
+
+        // let groupName = this.groupName;
+        // let groupScale=this.groupScale;
+        // let direction= this.direction;
+        // let isPublic=this.isPublic;
+
+        // // 发送创建群组的请求
+        // axios.post('http://localhost:8080/CMS/Group/createGroup', {
+        //   groupName: this.groupName,
+        //   groupDescription: this.groupDescription
+        // })
+        //         .then(response => {
+        //           alert('Group created successfully!');
+        //           // 跳转到群组中心页面
+        //           window.location.href = 'groupCenter.html';
+        //         })
+        //         .catch(error => {
+        //           alert('Failed to create group. Please try again.');
+        //           console.error('Error creating group:', error);
+        //         });
       }
     }
   });

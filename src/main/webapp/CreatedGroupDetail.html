@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>UnJoinGroupDetail</title>
+  <script src="js/vue.js"></script>
+  <script src="js/axios-0.18.0.js"></script>
+</head>
+<body>
+
+<div id="app">
+  <h1>CreatedGroupDetail</h1>
+  <hr>
+
+  <div class="group-details">
+    <h2>{{ groupDetail.groupName }}</h2>
+    <p><strong>Group ID:</strong> {{ groupDetail.groupId }}</p>
+    <p><strong>Group Scale:</strong> {{ groupDetail.groupScale }}</p>
+    <p><strong>Direction:</strong> {{ groupDetail.direction }}</p>
+  </div>
+
+  <button @click="quitGroup">Quit group</button>
+
+  <!-- Add Search Box -->
+  <div>
+    <input type="text" v-model="inviteUserId" placeholder="输入要拉的人的id">
+    <button @click="invite">Invite</button>
+  </div>
+
+
+</div>
+
+<script>
+  new Vue({
+    el: '#app',
+    data() {
+      return {
+        groupDetail: {},
+        groupId:'',
+        groupName:'',
+        inviteUserId:''
+      };
+    },
+    mounted() {
+      this.loadGroupDetail();
+    },
+    methods: {
+      loadGroupDetail() {
+        // 解析URL以获取群组名称
+        const urlParams = new URLSearchParams(window.location.search);
+        const groupName = urlParams.get('groupName');
+
+        //传数据到servlet中
+        const params = new URLSearchParams();
+        params.append("groupName",groupName);
+
+        axios({
+          method: "post",
+          url: "http://localhost:8080/CMS/Group/getGroupDetails",
+          data: params
+        }).then((resp) => {
+          this.groupDetail = resp.data;
+          //下面的两个赋值是为了给退出用的
+          this.groupId=resp.data.groupId;
+          this.groupName=resp.data.groupName;
+          alert(resp.data)
+        }).catch(error => {
+          alert('axios  failed. Please try again.');
+        });
+
+      },
+
+
+      invite() {
+        const params4 = new URLSearchParams();
+        params4.append("groupId", this.groupId);
+        params4.append("groupName",this.groupName);
+        params4.append("inviteUserId",this.inviteUserId);
+        try {
+          const resp = axios.post("http://localhost:8080/CMS/Group/invite", params4);
+          alert("拉人成功HTML");
+        } catch (error) {
+          console.error('axios failed:', error);
+          alert('quitGroup axios failed. Please try again.');
+        }
+
+      }
+
+
+      // joinGroup() {
+      //   //传数据到servlet中
+      //   const params = new URLSearchParams();
+      //   params.append("groupName",this.groupName);
+      //   params.append("groupId",this.groupId);
+      //
+      //
+      //   axios({
+      //     method: "post",
+      //     url: "http://localhost:8080/CMS/Group/joinGroup",
+      //     data: params
+      //   }).then((resp) => {
+      //     alert("加入成功");
+      //   }).catch(error => {
+      //     alert('axios  failed. Please try again.');
+      //   });
+      //   // 在这里添加加入群组的逻辑
+      //   // 你可以发送一个请求到服务器来加入群组
+      //   // 例如：
+      //   // axios.post("http://localhost:8080/CMS/Group/joinGroup", { groupName: this.groupDetail.groupName })
+      //   //     .then((resp) => {
+      //   //         alert('Successfully joined the group!');
+      //   //     })
+      //   //     .catch(error => {
+      //   //         alert('Failed to join the group. Please try again.');
+      //   //     });
+      //   // alert('Join into groups clicked!');
+      // }
+    }
+  });
+</script>
+
+<style>
+  /* 样式 */
+  .group-details {
+    margin: 20px;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .group-details h2 {
+    margin-bottom: 15px;
+    font-size: 24px;
+  }
+
+  .group-details p {
+    margin-bottom: 10px;
+    font-size: 18px;
+  }
+</style>
+
+</body>
+</html>

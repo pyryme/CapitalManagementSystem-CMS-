@@ -36,7 +36,7 @@ public interface UserService {
      * @return 返回用户名
      * @throws SQLException mysql操作中可能遇到的异常
      */
-    String getUserName(Integer userId) throws SQLException;
+    String getUserName(String userId) throws SQLException;
 
 
     String getUserAvatar(String username) throws SQLException;

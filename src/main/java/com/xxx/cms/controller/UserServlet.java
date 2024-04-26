@@ -178,10 +178,16 @@ public class UserServlet extends BaseServlet {
 
         //如果登录成功：
         if (result.getCode().equals(ResultConst.SUCCESS)) {
+            //将用户的name存入session中（但是原理和下面的不同,这里直接用，下面的id是用这个name去数据库拿的）
+            String userName = userLoginVO.getUsername();
+            HttpSession userNameSession = req.getSession();
+            userNameSession.setAttribute("userName",userName);
+
             //将用户id存储至session中
-            Integer userId = (Integer) result.getData();
+            String  userId = (String) result.getData();
             HttpSession userIdSession = req.getSession();
             userIdSession.setAttribute("userId", userId);
+
         }
 
         //返回结果封装类中的信息给前端页面
@@ -240,7 +246,7 @@ public class UserServlet extends BaseServlet {
     public void getUserName(HttpServletRequest req, HttpServletResponse resp) throws IOException, SQLException {
         //1.获取当前用户id
         HttpSession session = req.getSession();
-        Integer userId = (Integer) session.getAttribute("userId");
+        String userId = (String) session.getAttribute("userId");
 
         //2.调用service层方法获取用户名
         String userName = userService.getUserName(userId);

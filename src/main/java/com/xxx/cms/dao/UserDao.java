@@ -43,7 +43,7 @@ public interface UserDao {
      * @return 返回用户id
      * @throws SQLException mysql操作中可能遇到的异常
      */
-    Integer getUserId(String name) throws SQLException;
+    String getUserId(String name) throws SQLException;
 
     /**
      * 5.获取用户名
@@ -55,14 +55,14 @@ public interface UserDao {
 
 
 
-    String getUserName(Integer userId) throws SQLException;
+    String getUserName(String userId) throws SQLException;
 
     String getUserAvatar(String username) throws SQLException;
 
     String getUserPhone(String username) throws SQLException;
 
 
-
+    boolean isUser_UserId(String userId) throws SQLException;
 
 
 

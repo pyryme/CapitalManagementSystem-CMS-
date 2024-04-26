@@ -20,10 +20,9 @@
   <!-- 我加入的群组 -->
   <h2>我加入的群组</h2>
   <div class="group-list">
-    <div v-for="group in joinedGroups" :key="group.id" class="group-card">
-      <a :href="'groupDetails.html?id=' + group.id">
-        <h3>{{ group.name }}</h3>
-        <p>{{ group.description }}</p>
+    <div v-for="group in joinedGroups" :key="group" class="group-card">
+      <a :href="'JoinedGroupDetail.html?groupName=' + group">
+        <h3>{{ group }}</h3>
       </a>
     </div>
   </div>
@@ -31,13 +30,22 @@
   <!-- 我创建的群组 -->
   <h2>我创建的群组</h2>
   <div class="group-list">
-    <div v-for="group in createdGroups" :key="group.id" class="group-card">
-      <a :href="'groupDetails.html?id=' + group.id">
-        <h3>{{ group.name }}</h3>
-        <p>{{ group.description }}</p>
+    <div v-for="group in createdGroups" :key="group" class="group-card">
+      <a :href="'CreatedGroupDetail.html?groupName=' + group">
+        <h3>{{ group }}</h3>
       </a>
     </div>
   </div>
+
+  <h2>未加入的公开群组</h2>
+  <div class="group-list">
+    <div v-for="group in unJoinGroups" :key="group" class="group-card">
+      <a :href="'UnJoinGroupDetail.html?groupName=' + group">
+        <h3>{{ group }}</h3>
+      </a>
+    </div>
+  </div>
+
 </div>
 
 <script>
@@ -46,7 +54,8 @@
     data() {
       return {
         joinedGroups: [],
-        createdGroups: []
+        createdGroups: [],
+        unJoinGroups:[]
       };
     },
     mounted() {
@@ -57,6 +66,8 @@
         // 加载加入的群组
         axios.get('http://localhost:8080/CMS/Group/getJoinedGroups')
                 .then(response => {
+                  alert("Received groups: "+this.joinedGroups);
+                  console.log("Received groups: ", this.joinedGroups);
                   this.joinedGroups = response.data;
                 })
                 .catch(error => {
@@ -73,10 +84,20 @@
                   alert('Failed to load created groups. Please try again.');
                   console.error('Error loading created groups:', error);
                 });
+
+        // 加载未加入的公开群组
+        axios.get('http://localhost:8080/CMS/Group/getUnJoinGroups')
+                .then(response => {
+                  this.unJoinGroups = response.data;
+                })
+                .catch(error => {
+                  alert('Failed to load created groups. Please try again.');
+                  console.error('Error loading created groups:', error);
+                });
       },
       createGroup() {
         // 跳转到创建群组页面
-        window.location.href = 'createGroup.html';
+        window.location.href = 'CreateGroup.html';
       }
     }
   });

@@ -1,6 +1,7 @@
 package com.xxx.cms.dao.impl;
 
 
+import com.xxx.cms.bean.TimeBasedIdGenerator;
 import com.xxx.cms.dao.UserDao;
 import com.xxx.cms.model.User;
 import com.xxx.cms.util.DBUtils;
@@ -9,6 +10,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Random;
+import java.util.UUID;
 
 
 public class UserDaoImpl implements UserDao {
@@ -30,10 +33,16 @@ public class UserDaoImpl implements UserDao {
         else {
             System.out.println("UDIMPL Function_signup  no this user is right");
             //将用户名和密码存储到user表中
+            //屎山代码，加上id
+            String user_id = TimeBasedIdGenerator.generateId();
+
+
             //定义sql
-            String sqlInsert = "insert into users (username,password) values(?,?)";
+            String sqlInsert = "insert into users (username,password,user_id) values(?,?,?)";
             //执行增加数据操作
-            DBUtils.executeUpdate(sqlInsert, name, pw);
+            DBUtils.executeUpdate(sqlInsert, name, pw,user_id);
+
+
         }
         //2.5释放资源
         DBUtils.closeAll(null, null, rs);
@@ -41,6 +50,51 @@ public class UserDaoImpl implements UserDao {
         //3.返回结果
         return result;
     }
+
+
+
+
+    @Override
+    public boolean isUser_UserId(String userId) throws SQLException {
+        System.out.println("UDIMPL  ++++++++++++++ userId   :"+userId);
+        //        System.out.println("UDIMPL into Function_isUser");
+        //1.定义结果变量
+        boolean result = false;
+
+        //2.执行JDBC操作
+        //2.1定义sql
+        //#1数据类型解释：sql的数据类型写成string，并且包含?（这里好像可以防止sql注入）
+        String sql = "select * from users where user_id=?";
+//        System.out.println("UDIMPL define and init sql");
+
+        //2.2执行查询操作---------------------关键行
+        //#1数据类型解释：把string类型的sql语句 传入DBUtils.executeQuery(sql, name)中。
+        //   用resultset这个类来实例化一个rs，然后将这个执行的语句赋值给这个东西，对数据库不同的操作就决定了怎么处理这个rs
+        //   这里是查询，就用if的语句来判断
+        ResultSet rs = DBUtils.executeQuery(sql, userId);
+//        System.out.println("UDIMPL init rs"+rs);
+        //2.3处理结果
+        if (rs.next()) {
+            result = true;
+        }
+        //2.4释放资源-------------------------
+        DBUtils.closeAll(null, null, rs);
+
+        //3.返回结果
+//        System.out.println("UDIMPL finish Function_isUser,return:"+result);
+        return result;
+    }
+
+
+
+
+
+
+
+
+
+
+
 
     @Override
     public boolean isUser(String name) throws SQLException {
@@ -52,14 +106,14 @@ public class UserDaoImpl implements UserDao {
         //2.1定义sql
         //#1数据类型解释：sql的数据类型写成string，并且包含?（这里好像可以防止sql注入）
         String sql = "select * from users where username=?";
-        System.out.println("UDIMPL define and init sql");
+//        System.out.println("UDIMPL define and init sql");
 
         //2.2执行查询操作---------------------关键行
         //#1数据类型解释：把string类型的sql语句 传入DBUtils.executeQuery(sql, name)中。
         //   用resultset这个类来实例化一个rs，然后将这个执行的语句赋值给这个东西，对数据库不同的操作就决定了怎么处理这个rs
         //   这里是查询，就用if的语句来判断
         ResultSet rs = DBUtils.executeQuery(sql, name);
-        System.out.println("UDIMPL init rs"+rs);
+//        System.out.println("UDIMPL init rs"+rs);
         //2.3处理结果
         if (rs.next()) {
             result = true;
@@ -68,7 +122,7 @@ public class UserDaoImpl implements UserDao {
         DBUtils.closeAll(null, null, rs);
 
         //3.返回结果
-        System.out.println("UDIMPL finish Function_isUser,return:"+result);
+//        System.out.println("UDIMPL finish Function_isUser,return:"+result);
         return result;
     }
 
@@ -91,7 +145,7 @@ public class UserDaoImpl implements UserDao {
 
 
     @Override
-    public Integer getUserId(String name) throws SQLException {
+    public String getUserId(String name) throws SQLException {
         //1.执行JDBC操作
         //1.1定义sql
         String sql = "select user_id from users where username=?";
@@ -99,7 +153,9 @@ public class UserDaoImpl implements UserDao {
         ResultSet rs = DBUtils.executeQuery(sql, name);
         //1.3处理结果
         rs.next();
-        Integer userId = rs.getInt("user_id");
+//        Integer userId = rs.getInt("user_id");
+        String userId = rs.getString("user_id");
+
         //1.4释放资源
         DBUtils.closeAll(null, null, rs);
 
@@ -108,8 +164,9 @@ public class UserDaoImpl implements UserDao {
 
     }
 
+    //这个会报错的，不要用！！！！！！！！userid后面改为string了
     @Override
-    public String getUserName(Integer userId) throws SQLException {
+    public String getUserName(String userId) throws SQLException {
         //1.定义用户id变量
         String userName;
 

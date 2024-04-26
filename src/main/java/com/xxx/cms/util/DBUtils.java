@@ -179,6 +179,7 @@ public class DBUtils {
             System.out.println("Prepared SQL: " + pstmt.toString());
 
 
+            //-----------------------------------------------出错点，
             //执行sql
             rs = pstmt.executeQuery();
             System.out.println("DBUTILS try2(in Function_executeQuery) success,define rs:"+rs);
