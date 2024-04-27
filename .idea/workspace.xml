@@ -4,26 +4,64 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="335f1d36-0b58-467a-b317-f4348f281816" name="Default Changelist" comment="" />
+    <list default="true" id="335f1d36-0b58-467a-b317-f4348f281816" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/xxx/cms/controller/TransactionServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/xxx/cms/controller/TransactionServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/xxx/cms/dao/AllMemberDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/xxx/cms/dao/AllMemberDao.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/xxx/cms/dao/impl/AllMemberDaoImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/xxx/cms/dao/impl/AllMemberDaoImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/xxx/cms/service/AllMemberService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/xxx/cms/service/AllMemberService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/xxx/cms/service/impl/AllMemberServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/xxx/cms/service/impl/AllMemberServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/TransactionCenter.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/TransactionCenter.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/xxx/cms/service/impl/AllMemberServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/xxx/cms/service/impl/AllMemberServiceImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="HTML File" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="2fe01LUad4pClWpXkQ77yxCGFC8" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="CLASS" />
+      <properties />
+      <listeners />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -34,6 +72,8 @@
       <option name="presentableId" value="Default" />
       <updated>1714146022654</updated>
       <workItem from="1714146025781" duration="64000" />
+      <workItem from="1714186002788" duration="145000" />
+      <workItem from="1714200579921" duration="8580000" />
     </task>
     <servers />
   </component>

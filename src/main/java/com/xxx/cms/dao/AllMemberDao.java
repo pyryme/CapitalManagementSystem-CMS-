@@ -8,6 +8,9 @@ import java.util.ArrayList;
 
 
 public interface AllMemberDao {
+    ArrayList<AllMemberVO> getAllMemberDetails_Array(ArrayList<String> arrayList_allCreatedGroupName)throws SQLException;
+
+    ArrayList<AllMemberVO> getCreatedGroups_all(String userId)throws SQLException;
 
     boolean inGroup(String groupId,String inviteUserId)throws SQLException;
 

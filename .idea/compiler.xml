@@ -7,6 +7,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="CMS" />
+        <module name="CMS - 副本14,tmd差点让git的rebase给坑死了" />
       </profile>
     </annotationProcessing>
   </component>

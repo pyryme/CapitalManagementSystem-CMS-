@@ -25,9 +25,9 @@
   <h2>我创建的群组</h2>
   <div class="group-list">
     <div v-for="group in createdGroups" :key="group.groupId" class="group-card">
-      <h3>{{ group.groupId }} - {{ group.groupName }} - 我的余额: {{ group.myBalance }}</h3>
-      <div v-for="member in group.members" :key="member.userId">
-        <p>用户ID: {{ member.userId }}, 用户名: {{ member.userName }}, 是否管理员: {{ member.isManager }}, 余额: {{ member.balance }}</p>
+      <h3>群组id{{ group.groupId }} - 群组名{{ group.groupName }} - 我的余额: {{ group.myBalance }}</h3>
+      <div v-for="member in group.arrayList_members" :key="member.userId"  >
+        <p>用户ID: {{ member.userId }}, 用户名: {{ member.userName }} , 是否管理员: {{ member.isManager }}, 余额: {{ member.balance }}</p>
       </div>
     </div>
   </div>
@@ -49,10 +49,13 @@
     <div v-for="group in memberGroups" :key="group.groupId" class="group-card">
       <h3>{{ group.groupId }} - {{ group.groupName }} - 我的余额: {{ group.myBalance }}</h3>
       <div v-for="member in group.members" :key="member.userId">
-        <p>用户ID: {{ member.userId }}, 用户名: {{ member.userName }}, 是否管理员/创建者: {{ member.isManager }}/{{ member.isCreator }}, 余额: {{ member.balance }}</p>
+        <p>用户ID: {{ member.memberId }}, 用户名: {{ member.memberName }}, 是否管理员/创建者: {{ member.isManager }}/{{ member.isCreator }}, 余额: {{ member.balance }}</p>
       </div>
     </div>
   </div>
+
+  <button @click="test"><i class="fas fa-history"></i> 调试</button>
+
 
 </div>
 
@@ -70,9 +73,12 @@
       this.loadGroups();
     },
     methods: {
+      test(){
+        alert("  ///  "+this.createdGroups);
+      },
       loadGroups() {
         // 加载我创建的群组
-        axios.get('http://localhost:8080/CMS/Group/getCreatedGroups_toTCHTML')
+        axios.get('http://localhost:8080/CMS/Transaction/getCreatedGroups_toTCHTML')
                 .then(response => {
                   this.createdGroups = response.data;
                 })
@@ -80,23 +86,23 @@
                   console.error('Error loading created groups:', error);
                 });
 
-        // 加载我作为管理员加入的群组
-        axios.get('http://localhost:8080/CMS/Group/getManagerGroups')
-                .then(response => {
-                  this.managerGroups = response.data;
-                })
-                .catch(error => {
-                  console.error('Error loading manager groups:', error);
-                });
-
-        // 加载我作为成员加入的群组
-        axios.get('http://localhost:8080/CMS/Group/getMemberGroups')
-                .then(response => {
-                  this.memberGroups = response.data;
-                })
-                .catch(error => {
-                  console.error('Error loading member groups:', error);
-                });
+        // // 加载我作为管理员加入的群组
+        // axios.get('http://localhost:8080/CMS/Group/getManagerGroups')
+        //         .then(response => {
+        //           this.managerGroups = response.data;
+        //         })
+        //         .catch(error => {
+        //           console.error('Error loading manager groups:', error);
+        //         });
+        //
+        // // 加载我作为成员加入的群组
+        // axios.get('http://localhost:8080/CMS/Group/getMemberGroups')
+        //         .then(response => {
+        //           this.memberGroups = response.data;
+        //         })
+        //         .catch(error => {
+        //           console.error('Error loading member groups:', error);
+        //         });
       },
       goToTransactionPage() {
         window.location.href = 'transaction.html';
@@ -109,7 +115,7 @@
 </script>
 
 <style>
-  /* 基本样式 */
+
   body {
     font-family: Arial, sans-serif;
     margin: 20px;

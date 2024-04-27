@@ -1,5 +1,8 @@
 com\xxx\cms\util\DBUtils.class
+com\xxx\cms\bean\vo\GroupTransactionVO.class
+com\xxx\cms\bean\vo\GroupTransactionVO2.class
 com\xxx\cms\service\impl\AllMemberServiceImpl.class
+com\xxx\cms\service\TransactionService.class
 com\xxx\cms\service\AllMemberService.class
 com\xxx\cms\model\User.class
 com\xxx\cms\controller\UserServlet.class
@@ -7,3 +10,5 @@ com\xxx\cms\bean\vo\UserAvatarVO.class
 com\xxx\cms\service\impl\GroupServiceImpl.class
 com\xxx\cms\service\impl\UserServiceImpl.class
 com\xxx\cms\bean\vo\UserSignupVO.class
+com\xxx\cms\service\impl\TransactionServiceImpl.class
+com\xxx\cms\controller\TransactionServlet.class

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>生成订单</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <script src="js/vue.js"></script>
+  <script src="js/axios-0.18.0.js"></script>
+</head>
+<body>
+
+<div id="app">
+  <h1>生成订单</h1>
+  <hr>
+
+  <!-- 输入表单 -->
+  <div class="form-container">
+    <label for="groupId_sender">发起转账的群组ID:</label>
+    <input type="text" id="groupId_sender" v-model="groupIdSender"><br>
+
+    <label for="groupId_receiver">接收转账的群组ID:</label>
+    <input type="text" id="groupId_receiver" v-model="groupIdReceiver"><br>
+
+    <label for="userId">转账对象的UserID:</label>
+    <input type="text" id="userId" v-model="userId"><br>
+
+    <label for="amount">转账金额:</label>
+    <input type="number" id="amount" v-model="amount" step="0.01" max="50000"><br>
+
+    <label for="description">转账说明:</label>
+    <input type="text" id="description" v-model="description" maxlength="50"><br>
+  </div>
+
+  <!-- 提交按钮 -->
+  <button @click="submitTransaction"><i class="fas fa-check"></i> 提交</button>
+</div>
+
+<script>
+  new Vue({
+    el: '#app',
+    data() {
+      return {
+        groupIdSender: '',
+        groupIdReceiver: '',
+        userId: '',
+        amount: 0.00,
+        description: ''
+      };
+    },
+    methods: {
+      submitTransaction() {
+        // 在这里实现提交订单的逻辑
+        // 可以使用this.groupIdSender, this.groupIdReceiver, this.userId, this.amount, this.description来获取输入的值
+        // 可以使用axios发送HTTP请求
+      }
+    }
+  });
+</script>
+
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background-color: #f2f2f2;
+  }
+  h1 {
+    text-align: center;
+    color: #333;
+  }
+  .form-container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  label {
+    display: block;
+    margin-bottom: 5px;
+    color: #333;
+  }
+  input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+  }
+  button {
+    display: block;
+    margin: 0 auto;
+    padding: 10px 20px;
+    border: none;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  button i {
+    margin-right: 5px;
+  }
+  button:hover {
+    background-color: #0056b3;
+  }
+</style>
+
+</body>
+</html>

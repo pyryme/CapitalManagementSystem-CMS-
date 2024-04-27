@@ -10,9 +10,13 @@ import java.util.ArrayList;
 
 
 public interface AllMemberService {
-     Result invite(String groupId,String groupName,String inviteUserId)throws SQLException;
+    Result getAllMemberDetails_Array(ArrayList<String> arrayList_allCreatedGroupName)throws SQLException;
 
-     Result quitGroupMember(String groupId,String userId)throws SQLException;
+    Result getCreatedGroups_all(String userId) throws SQLException;
+
+    Result invite(String groupId,String groupName,String inviteUserId)throws SQLException;
+
+    Result quitGroupMember(String groupId,String userId)throws SQLException;
 
     Result quitGroupManager(String groupId,String userId,double balance)throws SQLException;
 

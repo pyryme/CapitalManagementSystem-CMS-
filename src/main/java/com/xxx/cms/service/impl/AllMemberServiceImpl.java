@@ -22,6 +22,49 @@ public class AllMemberServiceImpl implements AllMemberService {
     private final AllMemberDaoImpl allMemberDao = new AllMemberDaoImpl();
     private final UserDaoImpl userDao = new UserDaoImpl();
 
+    //------------------------------transaction事务-----------------------
+    @Override
+    public Result getAllMemberDetails_Array(ArrayList<String> arrayList_allCreatedGroupName)throws SQLException{
+        ArrayList<AllMemberVO> arrayList = new ArrayList<>();
+        arrayList = allMemberDao.getAllMemberDetails_Array(arrayList_allCreatedGroupName);
+
+        if (arrayList.isEmpty()) {
+            //感觉用Result也可以，既可以携带信息true/false，也可以携带数据data
+            return Result.fail("没有数据",null);
+        }
+        //4.4如果插入数据成功：返回结果封装类并注明成功信息
+        else {
+            return Result.success("成功获得数据",arrayList);
+        }
+
+    }
+
+
+
+
+
+    @Override
+    public Result getCreatedGroups_all(String userId) throws SQLException{
+        ArrayList<AllMemberVO> arrayList = new ArrayList<>();
+        arrayList = allMemberDao.getCreatedGroups_all(userId);
+
+        if (arrayList.isEmpty()) {
+            //感觉用Result也可以，既可以携带信息true/false，也可以携带数据data
+            return Result.fail("没有数据",null);
+        }
+        //4.4如果插入数据成功：返回结果封装类并注明成功信息
+        else {
+            return Result.success("成功获得数据",arrayList);
+        }
+
+    }
+
+
+
+
+
+
+
     //-------------------------------group事务-------------------------------
 
     @Override

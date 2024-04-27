@@ -22,6 +22,95 @@ import java.util.List;
 
 public class AllMemberDaoImpl implements AllMemberDao {
 
+    @Override
+    public ArrayList<AllMemberVO> getAllMemberDetails_Array(ArrayList<String> arrayList_allCreatedGroupName)throws SQLException{
+        ArrayList<AllMemberVO> arrayList_allMemberVO = new ArrayList<>();
+        AllMemberVO allMemberVO=new AllMemberVO();
+
+        try {
+//            System.out.println("AMDIMPL -----get into F_gAMD try---------");
+
+
+            for (int i=0;i<arrayList_allCreatedGroupName.size();i++) {//外层for循环改变不同的群组
+
+                String sqlSelect ="SELECT group_id,group_name, member_id,member_name, iscreator, ismanager, balance FROM allmember WHERE group_name = ?";
+                ResultSet rs = DBUtils.executeQuery(sqlSelect,arrayList_allCreatedGroupName.get(i));
+
+                while (rs.next()) {//内层while拿同一个群组的不同人的数据
+                    String groupId = rs.getString("group_id");
+                    String groupName = rs.getString("group_name");
+                    String memberName = rs.getString("member_name");
+                    String memberId = rs.getString("member_id");
+                    String isCreator = rs.getString("iscreator");
+                    String isManager = rs.getString("ismanager");
+                    double balance = rs.getDouble("balance");
+                    allMemberVO = new AllMemberVO(groupId, groupName, memberId, memberName, isCreator, isManager, balance);
+                    arrayList_allMemberVO.add(allMemberVO);
+                }
+                DBUtils.closeAll(null, null, rs);
+            }
+
+        }catch (SQLException e){
+            e.printStackTrace();
+            throw e;
+        }
+
+
+
+        // 返回AllMemberVO对象
+        return arrayList_allMemberVO;
+
+    }
+
+
+
+
+
+    //这个含义要和上面那个区分
+    @Override
+    public ArrayList<AllMemberVO> getCreatedGroups_all(String userId)throws SQLException{
+        ArrayList<AllMemberVO> arrayList_allMemberVO = new ArrayList<>();
+        AllMemberVO allMemberVO=new AllMemberVO();
+
+        String sqlSelect ="SELECT group_id,group_name,member_id, member_name, iscreator, ismanager, balance FROM allmember WHERE member_id = ?";
+        String memberId = userId;
+        ResultSet rs = DBUtils.executeQuery(sqlSelect,userId);
+
+        try {
+//            System.out.println("AMDIMPL -----get into F_gAMD try---------");
+
+            while (rs.next()) {
+                String groupId = rs.getString("group_id");
+                String groupName = rs.getString("group_name");
+                String memberName = rs.getString("member_name");
+                String isCreator = rs.getString("iscreator");
+                String isManager = rs.getString("ismanager");
+                double balance = rs.getDouble("balance");
+                allMemberVO=new AllMemberVO(groupId,groupName,memberId,memberName,isCreator,isManager,balance);
+                arrayList_allMemberVO.add(allMemberVO);
+            }
+
+        }catch (SQLException e){
+            e.printStackTrace();
+            throw e;
+        }
+        finally {
+            // 释放资源
+            DBUtils.closeAll(null, null, rs);
+        }
+
+
+        // 返回AllMemberVO对象
+        return arrayList_allMemberVO;
+
+    }
+
+
+
+
+
+
+
 
 
     @Override
@@ -119,6 +208,7 @@ public class AllMemberDaoImpl implements AllMemberDao {
 
 
 
+    //这个拿的是单个的数据
     @Override
     public AllMemberVO getAllMemberDetails(String groupId, String userId)throws SQLException{
         AllMemberVO allMemberVO = new AllMemberVO();
